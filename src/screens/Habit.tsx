@@ -6,7 +6,10 @@ import { ProgressBarr } from "../components/ProfressBar";
 import { CheckBox } from "../components/CheckBox";
 import { useState, useEffect } from "react";
 import { Loading } from "../components/Loading";
+import { HabitEmpity } from "../components/HabitEmpity";
 import { api } from "../lib/axios";
+import { generateProgressPorcentage } from "../utils/generate-progress-percentage";
+import clsx from "clsx";
 
 interface Params {
   date: string;
@@ -31,6 +34,10 @@ export function Habit() {
   const parsedDate = dayjs(date);
   const dayOfWeek = parsedDate.format("dddd");
   const dayAndMonth = parsedDate.format("DD/MM");
+  const isDateInPast = parsedDate.endOf('day').isBefore(new Date())
+
+  const habitsProgress = dayInfo?.possibleHabits.length 
+    ? generateProgressPorcentage(dayInfo.possibleHabits.length, completeHabits.length) : 0
 
   async function fetchHabits(){
     try{
@@ -55,8 +62,18 @@ export function Habit() {
     }, [])
   }
 
-  async function HandleToggleHabit(habitid: string){
-
+  async function HandleToggleHabit(habitId: string){
+    try{
+      await api.patch(`/habits/${habitId}/toggle`)
+      if(completeHabits.includes(habitId)){
+        setCompleteHabits(prevState => prevState.filter(habit => habit !== habitId))
+      }else{
+        setCompleteHabits(prevState => [...prevState, habitId])
+      }
+    }catch(error){
+      console.log(error)
+      Alert.alert('Ops', 'não foi possível atualizar as informações dos hábitos')
+    }
   }
   return (
     <View className="flex-1 bg-background px-8 pt-16">
@@ -70,20 +87,32 @@ export function Habit() {
         </Text>
         <Text className="text-white font-extrabold text-3">{dayAndMonth}</Text>
 
-        <ProgressBarr progress={40} />
+        <ProgressBarr progress={habitsProgress} />
 
-        <View className="mt-6">
+        <View className={clsx('mt-6', {
+          ["opacity-50"]: isDateInPast
+        })}>
           {
-            dayInfo?.possibleHabits &&
+            dayInfo?.possibleHabits ?
             dayInfo?.possibleHabits.map( habit =>(
             <CheckBox 
               key={habit.id}
               title={habit.title} 
               checked={completeHabits.includes(habit.id)} 
+              disabled={isDateInPast}
+              onPress={() => HandleToggleHabit(habit.id)}
             />
             ))
+            : <HabitEmpity />
           }
         </View>
+        {
+          isDateInPast && (
+            <Text className="text-white mt-10 text-center">
+              Você não pode editar um hábitos de uma data passada
+            </Text>
+          )
+        }
       </ScrollView>
     </View>
   );
