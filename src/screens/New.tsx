@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { ScrollView, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { BackButton } from "../components/BackButton";
 import { CheckBox } from "../components/CheckBox";
 import { Feather } from "@expo/vector-icons";

@@ -52,14 +52,6 @@ export function Habit() {
     } finally {
       setLoading(false)
     }
-    if (loading){
-      return (
-        <Loading />
-      )
-    }
-    useEffect(()=> {
-      fetchHabits()
-    }, [])
   }
 
   async function HandleToggleHabit(habitId: string){
@@ -75,6 +67,14 @@ export function Habit() {
       Alert.alert('Ops', 'não foi possível atualizar as informações dos hábitos')
     }
   }
+  useEffect(()=> {
+    fetchHabits()
+  }, [])
+  if (loading){
+    return (
+      <Loading />
+    )
+  }
   return (
     <View className="flex-1 bg-background px-8 pt-16">
       <ScrollView
@@ -85,7 +85,9 @@ export function Habit() {
         <Text className="mt-6 text-zinc-400 font-semibold text-base lowercase">
           {dayOfWeek}
         </Text>
-        <Text className="text-white font-extrabold text-3">{dayAndMonth}</Text>
+        <Text className="text-white font-extrabold text-3">
+          {dayAndMonth}
+        </Text>
 
         <ProgressBarr progress={habitsProgress} />
 
