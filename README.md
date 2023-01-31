@@ -1,5 +1,5 @@
 <p align="center">
-<h1> NLW-IGNITE-MOBILE </h1>
+<h1 align="center"> NLW-IGNITE-MOBILE </h1>
 </p>
 
 </br>
