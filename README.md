@@ -18,4 +18,4 @@ Quando a pessoa abrir o aplicativo, ela irá ter que adicionar os hábitos dela 
 
 # Técnologia usada:
 
-Usei o react-native, Typescript, Axios, CLSX, Dayjs, expo e TailwindCSS
+React-native, Typescript, Axios, CLSX, Dayjs, expo e TailwindCSS
